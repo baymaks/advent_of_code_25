@@ -1,6 +1,7 @@
 from utils import *
 import re
 import time
+from itertools import chain
 
 class Day1Solution:
     
@@ -260,26 +261,49 @@ class Day4Solution:
 
 class Day5Solution:
         
-    # lines = read_file_1("inputs/input_day5.txt")
-    lines = []
+    fresh_ranges, available_ids = read_file_3("inputs/input_day5.txt")
+    # fresh_ranges = [(16, 20), (3, 5), (10, 14), (12, 18)]
+    # available_ids = [ 1, 5, 8, 11, 17, 32 ]
 
-    def solution_part1(self, lines):
-        pass 
 
-    def solution_part2(self, lines):
-        pass
+    def solution_part1(self, fresh_ranges, available_ids):
+        fresh_set = [range(s, e + 1) for s, e in fresh_ranges] 
+        count = 0
+        for id in available_ids:
+            for fresh in fresh_set:
+                if id in fresh:
+                    count += 1
+                    break
+        return count
+
+    def solution_part2(self, fresh_ranges, available_ids):
+        fresh_rangess = sorted(fresh_ranges, key=lambda r: r[0]) 
+        start = fresh_rangess[0]
+        new_fresh_ranges = []
+        for fresh in fresh_rangess[1:]:
+            if start[1] >= fresh[0] and start[1] <= fresh[1]:
+                start = (start[0], fresh[1])
+            elif start[1] < fresh[0]:
+                new_fresh_ranges.append(start)
+                start = fresh
+        
+        new_fresh_ranges.append(start) 
+        
+        return sum([e - s + 1 for s, e in new_fresh_ranges])
+                
+        
 
     def run(self):
         print("--------------------------------------")
         print("--------------- Day 5 ----------------")
         print("--------------------------------------")
         start1 = time.time()
-        result_part1 = self.solution_part1(self.lines)
+        result_part1 = self.solution_part1(self.fresh_ranges, self.available_ids)
         end1 = time.time() - start1
         print(f">   Part 1 Result: {result_part1}")
 
         start2 = time.time()
-        result_part2 = self.solution_part2(self.lines)
+        result_part2 = self.solution_part2(self.fresh_ranges, self.available_ids)
         end2 = time.time() - start2
         print(f">   Part 2 Result: {result_part2}")
         print(f">   Timing: {end1 + end2}")
@@ -314,9 +338,9 @@ class Day6Solution:
         print("--------------------------------------")
         print("\n")
 
-Day1Solution().run()
-Day2Solution().run()
-Day3Solution().run()
-Day4Solution().run()
+# Day1Solution().run()
+# Day2Solution().run()
+# Day3Solution().run()
+# Day4Solution().run()
 Day5Solution().run()
-Day6Solution().run()
+# Day6Solution().run()
