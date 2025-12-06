@@ -312,35 +312,61 @@ class Day5Solution:
 
 class Day6Solution:
         
-    # lines = read_file_1("inputs/input_day6.txt")
-    lines = []
+    lines_part1 = read_file_4_part1("inputs/input_day6.txt")
+    lines_part2 = read_file_4_part2("inputs/input_day6.txt")
+    # lines = []
 
     def solution_part1(self, lines):
-        pass 
+
+        final_ints = lines[0]
+        body_ints = lines[1:-1]
+        operators = lines[-1]
+
+        for line in body_ints:
+            for i in range(len(line)):
+                if operators[i] == '+':
+                    final_ints[i] += line[i]
+                else:
+                    final_ints[i] *= line[i]
+
+        return sum(final_ints)
 
     def solution_part2(self, lines):
-        pass
+        total = 0
+        for line in lines:
+            op = line[0]
+            if op == '*':
+                total_of_line = 1
+                for i in line[1:]:
+                    total_of_line *= i
+            else:
+                total_of_line = 0
+                for i in line[1:]:
+                    total_of_line += i
+
+            total += total_of_line
+        return total
 
     def run(self):
         print("--------------------------------------")
         print("--------------- Day 6 ----------------")
         print("--------------------------------------")
         start1 = time.time()
-        result_part1 = self.solution_part1(self.lines)
+        result_part1 = self.solution_part1(self.lines_part1)
         end1 = time.time() - start1
         print(f">   Part 1 Result: {result_part1}")
 
         start2 = time.time()
-        result_part2 = self.solution_part2(self.lines)
+        result_part2 = self.solution_part2(self.lines_part2)
         end2 = time.time() - start2
         print(f">   Part 2 Result: {result_part2}")
         print(f">   Timing: {end1 + end2}")
         print("--------------------------------------")
         print("\n")
 
-# Day1Solution().run()
-# Day2Solution().run()
-# Day3Solution().run()
-# Day4Solution().run()
+Day1Solution().run()
+Day2Solution().run()
+Day3Solution().run()
+Day4Solution().run()
 Day5Solution().run()
-# Day6Solution().run()
+Day6Solution().run()
